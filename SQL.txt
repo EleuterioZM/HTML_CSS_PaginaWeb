@@ -1,0 +1,84 @@
+-- Tabela de Turma
+CREATE TABLE Turma (
+    id INT PRIMARY KEY,
+    descricao VARCHAR(255)
+);
+
+-- Tabela de Estudante
+CREATE TABLE Estudante (
+    nr_matricula INT PRIMARY KEY,
+    nome VARCHAR(255),
+    apelido VARCHAR(255),
+    endereco VARCHAR(255),
+    contacto VARCHAR(20),
+    id_turma INT,
+    FOREIGN KEY (id_turma) REFERENCES Turma(id)
+);
+
+-- Tabela de Curso
+CREATE TABLE Curso (
+    id INT PRIMARY KEY,
+    nome VARCHAR(255)
+);
+
+-- Adicionando a coluna id_curso na tabela Estudante
+ALTER TABLE Estudante 
+ADD COLUMN id_curso INT,
+ADD CONSTRAINT fk_curso
+    FOREIGN KEY (id_curso) REFERENCES Curso(id);
+
+-- Tabela de Avaliacao
+CREATE TABLE Avaliacao (
+    id INT PRIMARY KEY,
+    descricao VARCHAR(255),
+    peso DECIMAL(5,2)
+);
+
+-- Tabela de Disciplina
+CREATE TABLE Disciplina (
+    id INT PRIMARY KEY,
+    nome VARCHAR(255),
+    chs INT,
+    credito INT
+);
+
+-- Tabela de Realiza (para o relacionamento Estudante-Avaliacao)
+CREATE TABLE Realiza (
+    id_estudante INT,
+    id_avaliacao INT,
+    nota DECIMAL(5,2),
+    PRIMARY KEY (id_estudante, id_avaliacao),
+    FOREIGN KEY (id_estudante) REFERENCES Estudante(nr_matricula),
+    FOREIGN KEY (id_avaliacao) REFERENCES Avaliacao(id)
+);
+
+-- Tabela de Associação Avaliacao_Disciplina (para o relacionamento Avaliacao-Disciplina)
+CREATE TABLE Avaliacao_Disciplina (
+    id_avaliacao INT,
+    id_disciplina INT,
+    PRIMARY KEY (id_avaliacao, id_disciplina),
+    FOREIGN KEY (id_avaliacao) REFERENCES Avaliacao(id),
+    FOREIGN KEY (id_disciplina) REFERENCES Disciplina(id)
+);
+-------------------------------------------------------------------------------
+
+Claro, aqui está uma explicação dos relacionamentos e das tabelas em palavras simples:
+
+*Estudante-Turma (1... - 1..1)**:
+
+Cada estudante está matriculado em uma única turma. Por exemplo, um estudante pode pertencer à turma "Turma A".
+Cada turma pode ter vários estudantes matriculados. Por exemplo, a turma "Turma A" pode ter vários estudantes matriculados nela.
+*Estudante-Curso (1.. - 1..1)**:
+
+Cada estudante está associado a um único curso. Por exemplo, um estudante pode estar cursando o "Curso de Engenharia".
+Cada curso pode ter vários estudantes associados a ele. Por exemplo, o "Curso de Engenharia" pode ter vários estudantes matriculados nele.
+Estudante-Avaliacao (1.. - 1...)**:
+
+Cada estudante pode realizar várias avaliações. Por exemplo, um estudante pode fazer o exame de matemática, física e história.
+Cada avaliação pode ser realizada por vários estudantes. Por exemplo, o exame de matemática pode ser feito por vários estudantes.
+A tabela Realiza guarda as notas de cada estudante em cada avaliação.
+Avaliacao-Disciplina (1.. - 1...)**:
+
+Cada avaliação pode pertencer a várias disciplinas. Por exemplo, um exame final pode abranger conteúdo de várias disciplinas, como matemática e física.
+Cada disciplina pode ter várias avaliações associadas a ela. Por exemplo, a disciplina de matemática pode ter vários exames associados a ela.
+Essas relações são estabelecidas por meio de chaves estrangeiras nas tabelas do banco de dados, garantindo a integridade e a precisão dos dados relacionados. Com essas tabelas, é possível armazenar informações sobre estudantes, turmas, cursos, avaliações e disciplinas, além de capturar os relacionamentos entre essas entidades.
